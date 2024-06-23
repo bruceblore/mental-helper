@@ -1,17 +1,20 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useState } from 'react';
 import { ConversationCache } from '../types';
 import "./Conversation.css"
 
 type ConversationProps = {
     conversation: ConversationCache,
-    setConversation: React.Dispatch<ConversationCache>
+    recording: boolean,
+    setRecording: React.Dispatch<boolean>,
+    enableOrDisableRecorder: (state: boolean) => void,
+    sendMessage: (message: string) => void
 }
 
 function Conversation(props: ConversationProps) {
-    let [recording, setRecording] = useState<boolean>(false);
+    let [messageBody, setMessageBody] = useState<string>('');
 
     function handleSubmitButton() {
-        throw new Error('Function not implemented.');
+        props.sendMessage(messageBody);
     }
 
     function handleTextBoxKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
@@ -20,7 +23,10 @@ function Conversation(props: ConversationProps) {
     }
 
     function handleCallButton() {
-        setRecording(!recording);
+        // The new, desired state will be the opposite of the current state
+        props.enableOrDisableRecorder(!props.recording);
+
+        props.setRecording(!props.recording);
     }
 
     return (<div className="conversation">
@@ -34,9 +40,27 @@ function Conversation(props: ConversationProps) {
             })}
         </div>
         <div className="chat-bar">
-            <input type="button" className="call-button" value="Call" onClick={handleCallButton} style={recording ? { backgroundColor: "#ff0000" } : {}}></input>
-            <input type="text" className='text-box' placeholder="Enter text here" onKeyDown={handleTextBoxKeyDown}></input>
-            <input type="button" className='submit-button' value="Submit" onClick={handleSubmitButton}></input>
+            <input
+                type="button"
+                className="call-button"
+                value="Call"
+                onClick={handleCallButton}
+                style={props.recording ? { backgroundColor: "#ff0000" } : {}}
+            ></input>
+            <input
+                type="text"
+                className='text-box'
+                placeholder="Enter text here"
+                onKeyDown={handleTextBoxKeyDown}
+                value={messageBody}
+                onChange={event => setMessageBody(event.target.value)}
+            ></input>
+            <input
+                type="button"
+                className='submit-button'
+                value="Submit"
+                onClick={handleSubmitButton}
+            ></input>
         </div>
     </div>);
 }

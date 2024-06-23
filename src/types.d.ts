@@ -1,4 +1,7 @@
-export type ConversationCache = Array<{
+export type Message = {
     sender: "hume" | "user",
-    body: string
-}>
+    body: string,
+    finished: boolean
+}
+
+export type ConversationCache = Array<Message>
