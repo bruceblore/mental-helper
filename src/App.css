@@ -3,8 +3,9 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 100%;
   pointer-events: none;
+  padding-left: 0;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -14,14 +15,16 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #000000;
+  height: 10vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-left: 5vw;
+  padding-right: 5vw;
 }
 
 .App-link {
@@ -32,7 +35,32 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.summarize-button {
+  margin-left: auto;
+}
+
+.conversation-summary-container {
+  display: flex;
+  gap: 0.2em;
+  background-color: #000000;
+  height: 100%;
+}
+
+.conversation-summary-container * {
+  background-color: #ffffff;
+  height: 90vh;
+}
+
+.conversation-summary-container .conversation {
+  flex: 1.5
+}
+
+.conversation-summary-container .summary {
+  flex: 1
 }
