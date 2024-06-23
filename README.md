@@ -10,6 +10,7 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Note: in the current state, you need to disable CORS to get it to work. On Chromium-based browsers, you can open a new window without CORS by running it with the `--disable-web-security --user-data-dir=/tmp/chrome` options
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
