@@ -52,7 +52,7 @@
   height: 100%;
 }
 
-.conversation-summary-container * {
+.conversation-summary-container>* {
   background-color: #ffffff;
   height: 90vh;
 }

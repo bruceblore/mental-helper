@@ -28,7 +28,7 @@ function App() {
       </header>
 
       <div className="conversation-summary-container">
-        <Conversation></Conversation>
+        <Conversation conversation={conversation} setConversation={setConversation}></Conversation>
         {summaryDisplayed ? <Summary></Summary> : <></>}
       </div>
     </div>
