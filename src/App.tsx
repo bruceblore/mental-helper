@@ -29,7 +29,7 @@ function App() {
 
       <div className="conversation-summary-container">
         <Conversation conversation={conversation} setConversation={setConversation}></Conversation>
-        {summaryDisplayed ? <Summary></Summary> : <></>}
+        {summaryDisplayed ? <Summary conversation={summarizedConversation} ></Summary> : <></>}
       </div>
     </div>
   );
