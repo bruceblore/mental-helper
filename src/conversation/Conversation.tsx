@@ -46,7 +46,7 @@ function Conversation(props: ConversationProps) {
                 className="call-button"
                 value="Call"
                 onClick={handleCallButton}
-                style={props.recording ? { backgroundColor: "#ff0000" } : {}}
+                style={props.recording ? { backgroundColor: "#ff0000", color: "#000000" } : { backgroundColor: "#00af00", color: "#ffffff" }}
             ></input>
             <input
                 type="text"
