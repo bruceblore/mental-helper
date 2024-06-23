@@ -11,8 +11,8 @@ function Summary(props: SummaryProps) {
 
     useEffect(() => {
         async function getSummary(): Promise<void> {
-            let prompt = 'Please summarize the following conversation between a therapist and their client. Your summary is going to be shown to the client, so take this into account when choosing tone and perspective. Try to keep it to a paragraph or two. If there are distinct recommendations, I encourage you to include a recommendation section at the end, featuring a list of the recommendations as bullet points, with newlines between them:\n' +
-                props.conversation.map(message => `${message.sender === 'user' ? 'Client' : 'Therapist'}: ${message.body}\n`).reduce((prev, cur) => prev + cur, '');
+            let prompt = 'Another AI named Mindpal aims to improve the mental health of its users. Please summarize the following conversation it and a user. Your summary is going to be shown to the user, so take this into account when choosing tone and perspective. Try to keep it to a paragraph or two. If there are distinct recommendations, I encourage you to include a recommendation section at the end, featuring a list of the recommendations as bullet points, with newlines between them:\n' +
+                props.conversation.map(message => `${message.sender === 'user' ? 'User' : 'Mindpal'}: ${message.body}\n`).reduce((prev, cur) => prev + cur, '');
 
             try {
                 let result = await fetch("https://chat-api.you.com/smart", {

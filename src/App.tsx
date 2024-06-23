@@ -30,7 +30,7 @@ function playAudio(): void {
   if (!audioBlob) return;
   const audioUrl = URL.createObjectURL(audioBlob);
   currentAudio = new Audio(audioUrl);
-  currentAudio.play();
+  currentAudio.play().catch()
   currentAudio.onended = () => {
     isPlaying = false;
     if (audioQueue.length) playAudio();
@@ -44,11 +44,13 @@ function stopAudio(): void {
   audioQueue.length = 0;
 }
 
+let socket: StreamSocket | undefined;
+
 function App() {
   let [summaryDisplayed, setSummaryDisplayed] = useState<boolean>(false);
   let [conversation, setConversation] = useState<ConversationCache>([]);
   let [conversationDisplayed, setConversationDisplayed] = useState<boolean>(false);
-  let [socket, setSocket] = useState<StreamSocket | undefined>(undefined);
+  // let [socket, setSocket] = useState<StreamSocket | undefined>(undefined);
   let [recording, setRecording] = useState<boolean>(false);
 
   function handleWebsocketMessageEvent(message: Hume.empathicVoice.SubscribeEvent): void {
@@ -69,7 +71,7 @@ function App() {
 
       // The user said something
       case "user_message":
-        setConversation(conversation.concat([{
+        setConversation(oldConvo => oldConvo.concat([{
           sender: "user",
           body: message.message.content ?? "",
           finished: true
@@ -78,30 +80,35 @@ function App() {
 
       // The model said something
       case "assistant_message":
-        lastMessage = conversation[conversation.length - 1];
-        if (lastMessage && lastMessage.sender === "hume" && !lastMessage.finished) {
-          setConversation(conversation.slice(0, -1).concat([{
-            sender: "hume",
-            body: lastMessage.body.trimEnd() + ' ' + (message.message.content ?? "").trimStart(),
-            finished: false
-          }]))
-        } else {
-          setConversation(conversation.concat([{
-            sender: "hume",
-            body: message.message.content ?? "",
-            finished: false
-          }]))
-        }
+        setConversation(oldConvo => {
+          lastMessage = oldConvo[oldConvo.length - 1];
+          if (lastMessage && lastMessage.sender === "hume" && !lastMessage.finished) {
+            return oldConvo.slice(0, -1).concat([{
+              sender: "hume",
+              body: lastMessage.body.trimEnd() + ' ' + (message.message.content ?? "").trimStart(),
+              finished: false
+            }])
+          } else {
+            return oldConvo.concat([{
+              sender: "hume",
+              body: message.message.content ?? "",
+              finished: false
+            }])
+          }
+        })
         break;
 
       // The model's message is over
       case "assistant_end":
-        lastMessage = conversation[conversation.length - 1];
-        setConversation(conversation.slice(0, -1).concat([{
-          sender: lastMessage.sender,
-          body: lastMessage.body,
-          finished: true
-        }]))
+        setConversation(oldConvo => {
+          let lastMessage = oldConvo[oldConvo.length - 1];
+          return oldConvo.slice(0, -1).concat([{
+            sender: lastMessage.sender,
+            body: lastMessage.body,
+            finished: true
+          }])
+        })
+        break;
     }
   }
 
@@ -111,6 +118,7 @@ function App() {
       ensureSingleValidAudioTrack(audioStream);
       recorder = new MediaRecorder(audioStream, { mimeType });
       recorder.ondataavailable = async ({ data }) => {
+        console.log('data available');
         if (data.size < 1) return;
         const encodedAudioData = await convertBlobToBase64(data);
         const audioInput: Omit<Hume.empathicVoice.AudioInput, 'type'> = { data: encodedAudioData }
@@ -122,7 +130,7 @@ function App() {
       // Blatantly copied from the hume tutorial
       // https://dev.hume.ai/docs/empathic-voice-interface-evi/quickstart/typescript
 
-      setSocket(await hume.empathicVoice.chat.connect({
+      socket = await hume.empathicVoice.chat.connect({
         onOpen: async () => {
           await setupAudio();
           setConversationDisplayed(true);
@@ -134,7 +142,7 @@ function App() {
           console.log(error);
         },
         onClose: () => { }
-      }));
+      });
     }
 
     setupHume();
@@ -147,7 +155,7 @@ function App() {
   function handleSummarizeButton(event: MouseEvent<HTMLInputElement>): void {
     // If the summary is not currently displyed, it will be, so update the summarized conversation
     if (!summaryDisplayed) {
-      setSummarizedConversation(summarizedConversation);
+      setSummarizedConversation(conversation);
     }
     setSummaryDisplayed(!summaryDisplayed);
   }
