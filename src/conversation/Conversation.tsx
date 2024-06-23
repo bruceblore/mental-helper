@@ -15,6 +15,7 @@ function Conversation(props: ConversationProps) {
 
     function handleSubmitButton() {
         props.sendMessage(messageBody);
+        setMessageBody("");
     }
 
     function handleTextBoxKeyDown(event: KeyboardEvent<HTMLInputElement>): void {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ConversationCache } from '../types';
+import "./Summary.css"
 const { v4: uuidv4 } = require('uuid');
 
 type SummaryProps = {

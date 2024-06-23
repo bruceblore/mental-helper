@@ -1,0 +1,11 @@
+.summary {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-content {
+    flex: 1;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    text-align: left;
+}

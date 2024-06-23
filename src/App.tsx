@@ -44,6 +44,7 @@ function stopAudio(): void {
   audioQueue.length = 0;
 }
 
+// Intentionally NOT using react's state system, because otherwise we end up with 10 billion sockets and then they don't work
 let socket: StreamSocket | undefined;
 
 function App() {

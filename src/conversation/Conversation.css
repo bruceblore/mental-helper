@@ -23,3 +23,38 @@
 .message-sender {
     font-weight: bold;
 }
+
+.conversation {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-container {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.chat-bar {
+    padding: 0.3em;
+    display: flex;
+}
+
+.text-box {
+    flex: 1;
+}
+
+.call-button {
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border: 1px solid black;
+}
+
+.submit-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 1em;
+    border-bottom-right-radius: 1em;
+    border: 1px solid black;
+}
